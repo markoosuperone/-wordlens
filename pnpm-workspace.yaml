@@ -1,0 +1,12 @@
+allowBuilds:
+  '@prisma/engines': true
+  esbuild: true
+  prisma: true
+
+# @nestjs/platform-fastify pins fastify 5.12.1 exactly, which left two copies in
+# the tree. @fastify/multipart declares no fastify dependency of its own, so its
+# `declare module 'fastify'` augmentation resolved against the hoisted 5.12.1
+# while our code imported 5.12.5 — and req.file() went missing from the types.
+# Forcing one copy keeps the augmentation and our imports on the same interface.
+overrides:
+  fastify: 5.12.5

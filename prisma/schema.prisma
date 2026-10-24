@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum ImageStatus {
+  PROCESSING
+  READY
+  FAILED
+}
+
+model Image {
+  id        String      @id @default(uuid())
+  filename  String
+  status    ImageStatus @default(PROCESSING)
+  width     Int
+  height    Int
+  words     Word[]
+  createdAt DateTime    @default(now())
+
+  @@map("images")
+}
+
+model Word {
+  id      String @id @default(uuid())
+  text    String
+  x       Float
+  y       Float
+  width   Float
+  height  Float
+
+  imageId String
+  image   Image  @relation(fields: [imageId], references: [id], onDelete: Cascade)
+
+  @@index([imageId])
+  @@map("words")
+}
